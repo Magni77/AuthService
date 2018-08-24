@@ -5,14 +5,7 @@ import pytest
 from app.use_cases.register import RegistrationUseCase
 
 
-@pytest.fixture()
-def account_repo(account):
-    repo = Mock()
-    repo.create.return_value = account
-    return repo
-
-
-def valid_account_is_created_test(account_repo):
+def valid_account_is_created_test(account_repo: Mock):
     use_case = RegistrationUseCase(account_repo)
 
     request = Mock()

@@ -8,8 +8,8 @@ class Account:
         self.password = password
         self.is_active = True
 
-    def set_password(self, password):
+    def set_password(self, password: str):
         self.password = generate_password_hash(password, "sha256")
 
-    def check_password(self, password):
+    def check_password(self, password: str):
         return check_password_hash(self.password, password)
