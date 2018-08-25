@@ -21,39 +21,40 @@ def jwt_gateway():
     )
 
 
+@pytest.fixture()
+def auth_use_case(account_repo: Mock, jwt_gateway: Mock):
+    return AuthUseCase(account_repo, jwt_gateway)
+
+
 def user_auth_with_jwt_token_test(
-        account_repo: Mock, jwt_gateway: Mock, account_with_pwd):
+        auth_use_case, account_with_pwd, account_repo, jwt_gateway):
 
-    use_case = AuthUseCase(account_repo, jwt_gateway)
-
-    account = use_case.auth(TOKEN)
+    account = auth_use_case.auth(TOKEN)
 
     assert account is account_with_pwd
 
     jwt_gateway.decode.assert_called_once_with(TOKEN)
-    account_repo.find.assert_called_once_with({'email': USER_DATA['email']})
+    account_repo.get.assert_called_once_with({'email': USER_DATA['email']})
 
 
 def user_can_auth_with_correct_credentials_test(
-        account_repo: Mock, jwt_gateway: Mock,
+        account_repo: Mock, jwt_gateway: Mock, auth_use_case,
         login_request: Mock, account_with_pwd):
 
-    use_case = AuthUseCase(account_repo, jwt_gateway)
-    token = use_case.login(login_request)
+    token = auth_use_case.login(login_request)
 
     assert token is TOKEN
-    account_repo.find.assert_called_once_with({'email': USER_DATA['email']})
+    account_repo.get.assert_called_once_with({'email': USER_DATA['email']})
 
 
 def user_can_not_auth_with_incorrect_credentials_test(
-        account_repo: Mock, jwt_gateway: Mock, account_with_pwd):
+        account_repo: Mock, jwt_gateway: Mock, auth_use_case, account_with_pwd):
 
     request = Mock()
     request.email = 'test@test.com'
-    request.password = '1232221'
+    request.password = '1232675221'
 
-    use_case = AuthUseCase(account_repo, jwt_gateway)
-    account = use_case.login(request)
+    token = auth_use_case.login(request)
 
-    assert account is None
-    account_repo.find.assert_called_once_with({'email': USER_DATA['email']})
+    assert token is None
+    account_repo.get.assert_called_once_with({'email': USER_DATA['email']})

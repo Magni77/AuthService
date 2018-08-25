@@ -8,4 +8,4 @@ class JwtGateway:
         return jwt.decode(token, self.SECRET, algorithm='HS256')
 
     def generate(self, data):
-        return jwt.encode(data, self.SECRET, algorithm='HS256')
+        return jwt.encode(data, self.SECRET, algorithm='HS256').decode('utf8')

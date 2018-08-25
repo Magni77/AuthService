@@ -7,7 +7,7 @@ USER_DATA = {
         'password': '1231'
     }
 SECRET = 'secret'
-TOKEN = jwt.encode(USER_DATA, SECRET, algorithm='HS256')
+TOKEN = jwt.encode(USER_DATA, SECRET, algorithm='HS256').decode('utf8')
 
 
 def can_decode_token_test():

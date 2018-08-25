@@ -33,7 +33,8 @@ def account_with_pwd(account_id):
 def account_repo(account, account_with_pwd):
     repo = Mock(
         create=Mock(return_value=account),
-        find=Mock(return_value=account_with_pwd)
+        find=Mock(return_value=[account_with_pwd]),
+        get=Mock(return_value=account_with_pwd)
     )
 
     return repo
