@@ -46,9 +46,10 @@ class MemoryAccountRepository(AccountsRepository):
             return None
 
         results = self._search(filters)
-
         if len(results) > 1:
             raise Exception('Get more than one value!')
+        if not results:
+            return None
 
         return results[0]
 

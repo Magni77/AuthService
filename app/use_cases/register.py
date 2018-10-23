@@ -9,6 +9,10 @@ class RegistrationUseCase:
         self.repo = repository
 
     def register(self, request):
+        if self.repo.get(
+                {'email': request.email}
+        ):
+            return None
         account = Account(
             id=uuid4().hex,
             email=request.email
